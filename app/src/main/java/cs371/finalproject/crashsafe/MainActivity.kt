@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         auth = FirebaseAuth.getInstance()
 
         if (auth.currentUser != null) {
@@ -47,14 +48,6 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.mainFrame, homeFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             .commit()
-    }
-
-    private fun signOut() {
-        AuthUI.getInstance()
-            .signOut(this)
-            .addOnCompleteListener {
-                // ...
-            }
     }
 
     private fun delete() {

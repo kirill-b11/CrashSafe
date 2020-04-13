@@ -8,11 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import cs371.finalproject.crashsafe.MainActivity
+import com.google.firebase.auth.FirebaseUser
 import cs371.finalproject.crashsafe.R
 
 class SigninFragment : Fragment() {
@@ -24,8 +25,14 @@ class SigninFragment : Fragment() {
         }
     }
 
-    val providersSignin = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
-    val providersGuest = arrayListOf(AuthUI.IdpConfig.AnonymousBuilder().build())
+    private lateinit var auth: FirebaseAuth
+    private val providersSignin = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
+    private val providersGuest = arrayListOf(AuthUI.IdpConfig.AnonymousBuilder().build())
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        auth = FirebaseAuth.getInstance()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,17 +41,32 @@ class SigninFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_signin, container, false)
 
-        val loginBut = view.findViewById<Button>(R.id.signinButton).setOnClickListener {
-            startActivityForResult(
-                AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(providersSignin)
-                    .build(),
-                RC_SIGN_IN
-            )
+        // Listeners for all the buttons
+        view.findViewById<Button>(R.id.signinButton).setOnClickListener {
+            startSigninActivity()
+        }
+        view.findViewById<Button>(R.id.signupButton).setOnClickListener {
+            startSigninActivity()
+        }
+        view.findViewById<Button>(R.id.contAsGuestButton).setOnClickListener {
+            anonymousSignin()
+        }
+        view.findViewById<Button>(R.id.exitButton).setOnClickListener {
+            activity?.moveTaskToBack(true)
+            activity?.finish()
         }
 
         return view
+    }
+
+    private fun startSigninActivity() {
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providersSignin)
+                .build(),
+            RC_SIGN_IN
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -55,7 +77,7 @@ class SigninFragment : Fragment() {
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
-                val user = FirebaseAuth.getInstance().currentUser
+                val user = auth.currentUser
                 Log.d("test","${user?.displayName}")
                 // ...
             } else {
@@ -66,5 +88,27 @@ class SigninFragment : Fragment() {
                 Log.d("test","sign in failed")
             }
         }
+    }
+
+    private fun anonymousSignin() {
+        auth.signInAnonymously()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("test", "signInAnonymously:success")
+                    val user = auth.currentUser
+                    updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("test", "signInAnonymously:failure")
+                    Toast.makeText(context, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                    updateUI(null)
+                }
+            }
+    }
+
+    private fun updateUI(user: FirebaseUser?) {
+
     }
 }
