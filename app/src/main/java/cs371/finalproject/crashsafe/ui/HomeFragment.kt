@@ -24,7 +24,6 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-
         view.findViewById<Button>(R.id.signoutButton).setOnClickListener {
             signOut()
         }
@@ -35,11 +34,11 @@ class HomeFragment : Fragment() {
         AuthUI.getInstance()
             .signOut(context!!)
             .addOnCompleteListener {
-                initSigninFragment()
+                sitchToSigninFragment()
             }
     }
 
-    private fun initSigninFragment() {
+    private fun sitchToSigninFragment() {
         val signinFragment = SigninFragment.newInstance()
         requireFragmentManager()
             .beginTransaction()

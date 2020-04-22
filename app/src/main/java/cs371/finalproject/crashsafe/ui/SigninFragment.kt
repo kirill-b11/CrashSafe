@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -79,15 +80,23 @@ class SigninFragment : Fragment() {
                 // Successfully signed in
                 val user = auth.currentUser
                 Log.d("test","${user?.displayName}")
-                // ...
+                switchToHomeFragment()
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
-                // ...
                 Log.d("test","sign in failed")
             }
         }
+    }
+
+    private fun switchToHomeFragment() {
+        val homeFragment = HomeFragment.newInstance()
+        requireFragmentManager()
+            .beginTransaction()
+            .replace(R.id.mainFrame, homeFragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .commit()
     }
 
     private fun anonymousSignin() {
@@ -97,18 +106,13 @@ class SigninFragment : Fragment() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("test", "signInAnonymously:success")
                     val user = auth.currentUser
-                    updateUI(user)
+                    switchToHomeFragment()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("test", "signInAnonymously:failure")
                     Toast.makeText(context, "Authentication failed.",
                         Toast.LENGTH_SHORT).show()
-                    updateUI(null)
                 }
             }
-    }
-
-    private fun updateUI(user: FirebaseUser?) {
-
     }
 }

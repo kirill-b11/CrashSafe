@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import androidx.fragment.app.FragmentTransaction
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -14,9 +15,6 @@ import cs371.finalproject.crashsafe.ui.SigninFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var homeFragment: HomeFragment
-    private lateinit var signinFragment: SigninFragment
-
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,17 +22,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         auth = FirebaseAuth.getInstance()
-
         if (auth.currentUser != null) {
-            homeFragment = HomeFragment.newInstance()
             initHomeFragment()
         } else {
-            signinFragment = SigninFragment.newInstance()
             initSigninFragment()
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
     private fun initSigninFragment() {
+        val signinFragment = SigninFragment.newInstance()
         supportFragmentManager
             .beginTransaction()
             .add(R.id.mainFrame, signinFragment)
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initHomeFragment() {
+        val homeFragment = HomeFragment.newInstance()
         supportFragmentManager
             .beginTransaction()
             .add(R.id.mainFrame, homeFragment)
