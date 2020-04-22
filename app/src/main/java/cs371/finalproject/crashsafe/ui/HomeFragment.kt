@@ -17,8 +17,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -30,6 +28,15 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+        view.findViewById<Button>(R.id.searchButton).setOnClickListener {
+            Log.d("test", "search clicked")
+            val searchFragment = SearchFragment.newInstance()
+            requireFragmentManager()
+                .beginTransaction()
+                .add(R.id.mainFrame, searchFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit()
+        }
 
         return view
     }
