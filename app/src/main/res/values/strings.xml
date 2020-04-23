@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CrashSafe</string>
+    <string name="about">CrashSafe is the convenient place to find all the safety information on cars before you buy. Our database combines car manufacturer specifications with independent third-party crash test data so you can be confident the car you drive off the lot will protect no matter what happens.</string>
 </resources>

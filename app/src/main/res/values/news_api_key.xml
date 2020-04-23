@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="news_api_key" templateMergeStrategy="preserve" translatable="false">
+        ea59bd7f04f749818e57f86f986716e2
+    </string>
+</resources>
