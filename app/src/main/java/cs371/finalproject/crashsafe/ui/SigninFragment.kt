@@ -98,7 +98,7 @@ class SigninFragment : Fragment() {
 
     private fun switchToHomeFragment() {
         val homeFragment = HomeFragment.newInstance()
-        requireFragmentManager()
+        parentFragmentManager
             .beginTransaction()
             .replace(R.id.mainFrame, homeFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

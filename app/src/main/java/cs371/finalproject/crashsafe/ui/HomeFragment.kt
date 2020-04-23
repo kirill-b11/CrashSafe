@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
         view.findViewById<Button>(R.id.searchButton).setOnClickListener {
             Log.d("test", "search clicked")
             val searchFragment = SearchFragment.newInstance()
-            requireFragmentManager()
+            parentFragmentManager
                 .beginTransaction()
                 .add(R.id.mainFrame, searchFragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
