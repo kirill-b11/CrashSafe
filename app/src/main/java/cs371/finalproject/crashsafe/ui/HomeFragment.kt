@@ -38,8 +38,9 @@ class HomeFragment : Fragment() {
             val searchFragment = SearchFragment.newInstance()
             parentFragmentManager
                 .beginTransaction()
-                .add(R.id.mainFrame, searchFragment)
+                .replace(R.id.mainFrame, searchFragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(null)
                 .commit()
         }
 

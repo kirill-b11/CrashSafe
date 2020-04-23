@@ -26,7 +26,6 @@ class ArticleRowAdapter(private val viewModel: MainViewModel)
         private var articleDescription = itemView.findViewById<TextView>(R.id.articleDescription)
 
         fun bind(article: NewsArticle) {
-            Log.d("test", "$article")
             val imgUrl = article.imageUrl
             Glide.glideFetch(imgUrl, noImageURL, articleImage)
             articleTitle.text = article.title
