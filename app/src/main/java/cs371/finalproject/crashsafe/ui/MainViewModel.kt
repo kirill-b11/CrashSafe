@@ -1,5 +1,6 @@
 package cs371.finalproject.crashsafe.ui
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,6 +19,10 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch(context = viewModelScope.coroutineContext + Dispatchers.IO) {
             articles.postValue(repository.fetchArticles())
         }
+    }
+
+    fun observeArticles(): LiveData<List<NewsArticle>> {
+        return articles
     }
 
 }

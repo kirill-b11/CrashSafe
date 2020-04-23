@@ -6,8 +6,11 @@ import android.view.*
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import cs371.finalproject.crashsafe.R
 
 class HomeFragment : Fragment() {
@@ -16,6 +19,8 @@ class HomeFragment : Fragment() {
             return HomeFragment()
         }
     }
+
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +43,24 @@ class HomeFragment : Fragment() {
                 .commit()
         }
 
+        viewModel.updatePosts()
+
+        val adapter = ArticleRowAdapter(viewModel)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+        val swipe = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+        swipe.setOnRefreshListener {
+            viewModel.updatePosts()
+            swipe.isRefreshing = false
+        }
+
+        viewModel.observeArticles().observe(viewLifecycleOwner, Observer {
+            adapter.updateList(it)
+            adapter.notifyDataSetChanged()
+        })
+
         return view
     }
-
-
-
-
 }
