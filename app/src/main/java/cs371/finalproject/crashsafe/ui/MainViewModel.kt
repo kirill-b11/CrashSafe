@@ -24,5 +24,4 @@ class MainViewModel : ViewModel() {
     fun observeArticles(): LiveData<List<NewsArticle>> {
         return articles
     }
-
 }
