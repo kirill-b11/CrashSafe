@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class MainViewModel : ViewModel() {
     private val redditApi = NewsApi.create()
     private val repository = NewsRepository(redditApi)
-    val articles = MutableLiveData<List<NewsArticle>>()
+    private val articles = MutableLiveData<List<NewsArticle>>()
 
     fun updatePosts() {
         viewModelScope.launch(context = viewModelScope.coroutineContext + Dispatchers.IO) {

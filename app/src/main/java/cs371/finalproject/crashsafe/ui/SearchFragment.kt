@@ -5,11 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import cs371.finalproject.crashsafe.R
+import okhttp3.internal.wait
 import java.util.*
 
 class SearchFragment : Fragment() {
@@ -19,6 +20,8 @@ class SearchFragment : Fragment() {
             return SearchFragment()
         }
     }
+
+    private val viewModel: SearchViewModel by activityViewModels()
 
     private var selectedYear = "0"
 
@@ -34,8 +37,30 @@ class SearchFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
         setupSpinner(view)
-
+        setupListeners(view)
         return view
+    }
+
+    private fun setupListeners(view: View) {
+        view.findViewById<Button>(R.id.keywordSearchButton).setOnClickListener {
+            val searchStr = view.findViewById<EditText>(R.id.keywordSearchET).text.toString()
+            if (searchStr.isEmpty()) {
+                Toast.makeText(context, "Please enter a search", Toast.LENGTH_SHORT).show()
+            } else {
+                searchAndSwitchFragment(searchStr)
+            }
+        }
+    }
+
+    private fun searchAndSwitchFragment(searchStr: String) {
+        viewModel.searchModels(searchStr)
+        val searchResultsFragment = SearchResultsFragment.newInstance()
+        parentFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainFrame, searchResultsFragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setupSpinner(view: View) {
@@ -60,7 +85,6 @@ class SearchFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                Log.d("test", years[position])
                 selectedYear = years[position]
             }
 

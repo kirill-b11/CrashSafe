@@ -9,6 +9,8 @@ data class VehicleModel (
     val make: String,
     @SerializedName("model")
     val model: String,
+    @SerializedName("img")
+    val img: String,
     @SerializedName("engine_type")
     val engineType: String,
     @SerializedName("vehicle_type")
