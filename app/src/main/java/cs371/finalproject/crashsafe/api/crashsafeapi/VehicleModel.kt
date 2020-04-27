@@ -3,6 +3,8 @@ package cs371.finalproject.crashsafe.api.crashsafeapi
 import com.google.gson.annotations.SerializedName
 
 data class VehicleModel (
+    @SerializedName("id")
+    val id: Int,
     @SerializedName("year")
     val year: Int,
     @SerializedName("make")

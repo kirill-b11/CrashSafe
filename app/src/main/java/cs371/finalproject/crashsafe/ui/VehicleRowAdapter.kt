@@ -24,6 +24,9 @@ class VehicleRowAdapter(private val viewModel: SearchViewModel)
         fun bind(vehicle: VehicleModel) {
             Glide.glideFetch(vehicle.img, noImageURL, vehicleImage)
             vehicleTitle.text = "${vehicle.year} ${vehicle.make} ${vehicle.model}"
+            vehicleTitle.setOnClickListener {
+                viewModel.switchToVehicleInfoFragment(it.context, vehicle)
+            }
         }
     }
 

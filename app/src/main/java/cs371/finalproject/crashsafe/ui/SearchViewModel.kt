@@ -1,5 +1,6 @@
 package cs371.finalproject.crashsafe.ui
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,5 +30,9 @@ class SearchViewModel: ViewModel() {
 
     fun refreshKeywordSearchResults() {
         keywordSearchResults.value = keywordSearchResults.value
+    }
+
+    fun switchToVehicleInfoFragment(context: Context, vehicle: VehicleModel) {
+        val vehInfoFragment = VehicleInfoFragment.newInstance()
     }
 }
