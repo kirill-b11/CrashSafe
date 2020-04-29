@@ -1,6 +1,7 @@
 package cs371.finalproject.crashsafe.ui
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +16,9 @@ class SearchViewModel: ViewModel() {
     private val crashSafeApi = CrashSafeApi.create()
     private val repository = CrashSafeRepository(crashSafeApi)
     private val keywordSearchResults = MutableLiveData<List<VehicleModel>>()
+    private val currentVehicle = MutableLiveData<VehicleModel>()
     var currentSearchStr = ""
+    var switch = true //used to prevent reinitialization of VehicleInfoFragment (couldn't find any other way to prevent it
 
     fun searchModels(searchStr: String) {
         currentSearchStr = searchStr
@@ -32,7 +35,12 @@ class SearchViewModel: ViewModel() {
         keywordSearchResults.value = keywordSearchResults.value
     }
 
-    fun switchToVehicleInfoFragment(context: Context, vehicle: VehicleModel) {
-        val vehInfoFragment = VehicleInfoFragment.newInstance()
+    fun updateCurrentVehicle(vehicle: VehicleModel?) {
+        switch = true
+        currentVehicle.value = vehicle
+    }
+
+    fun observeCurrentVehicle(): LiveData<VehicleModel> {
+        return currentVehicle
     }
 }

@@ -1,5 +1,6 @@
 package cs371.finalproject.crashsafe.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,8 @@ import cs371.finalproject.crashsafe.glide.Glide
 class VehicleRowAdapter(private val viewModel: SearchViewModel)
     : RecyclerView.Adapter<VehicleRowAdapter.VH>()  {
 
-    private val noImageURL = "https://cdn1.iconfinder.com/data/icons/cars-journey/91/Cars__Journey_68-512.png"
     private var list = mutableListOf<VehicleModel>()
+    private var pos = 0
 
     inner class VH(itemView: View)
         : RecyclerView.ViewHolder(itemView) {
@@ -22,10 +23,10 @@ class VehicleRowAdapter(private val viewModel: SearchViewModel)
         private var vehicleTitle = itemView.findViewById<TextView>(R.id.vehicleTitle)
 
         fun bind(vehicle: VehicleModel) {
-            Glide.glideFetch(vehicle.img, noImageURL, vehicleImage)
+            Glide.glideFetch(vehicle.img, VehicleInfoFragment.noImageURL, vehicleImage)
             vehicleTitle.text = "${vehicle.year} ${vehicle.make} ${vehicle.model}"
             vehicleTitle.setOnClickListener {
-                viewModel.switchToVehicleInfoFragment(it.context, vehicle)
+                viewModel.updateCurrentVehicle(vehicle)
             }
         }
     }
@@ -41,6 +42,7 @@ class VehicleRowAdapter(private val viewModel: SearchViewModel)
     }
 
     override fun onBindViewHolder(holder: VehicleRowAdapter.VH, position: Int) {
+        pos = position
         holder.bind(list[position])
     }
 

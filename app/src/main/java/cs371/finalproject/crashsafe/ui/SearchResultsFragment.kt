@@ -1,11 +1,13 @@
 package cs371.finalproject.crashsafe.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,11 +22,7 @@ class SearchResultsFragment: Fragment() {
     }
 
     private val viewModel: SearchViewModel by activityViewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
+    private lateinit var adapter: VehicleRowAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,11 +36,16 @@ class SearchResultsFragment: Fragment() {
     }
 
     private fun setupRecyclerView(view: View) {
-        val adapter = VehicleRowAdapter(viewModel)
+        adapter = VehicleRowAdapter(viewModel)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
+        setupObservers()
 
+        viewModel.refreshKeywordSearchResults()
+    }
+
+    private fun setupObservers() {
         viewModel.observeKeywordSearchResults().observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 adapter.updateList(it)
@@ -50,7 +53,18 @@ class SearchResultsFragment: Fragment() {
             }
         })
 
-        viewModel.refreshKeywordSearchResults()
+        viewModel.observeCurrentVehicle().observe(viewLifecycleOwner, Observer {
+            if (viewModel.switch) {
+                val vehicleInfoFragment = VehicleInfoFragment.newInstance()
+                parentFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.mainFrame, vehicleInfoFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .addToBackStack(null)
+                    .commit()
+                viewModel.switch = false
+            }
+        })
     }
 
     private fun setTitle(view: View) {

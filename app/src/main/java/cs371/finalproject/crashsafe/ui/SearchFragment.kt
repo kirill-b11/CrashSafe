@@ -50,6 +50,9 @@ class SearchFragment : Fragment() {
                 searchAndSwitchFragment(searchStr)
             }
         }
+        view.findViewById<Button>(R.id.nameSearchButton).setOnClickListener {
+
+        }
     }
 
     private fun searchAndSwitchFragment(searchStr: String) {
