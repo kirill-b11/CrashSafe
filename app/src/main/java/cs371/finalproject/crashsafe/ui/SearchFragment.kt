@@ -51,7 +51,16 @@ class SearchFragment : Fragment() {
             }
         }
         view.findViewById<Button>(R.id.nameSearchButton).setOnClickListener {
-
+            val make = view.findViewById<EditText>(R.id.makeET).text
+            if (make.isEmpty()) {
+                Toast.makeText(context, "Please enter vehicle's  make", Toast.LENGTH_SHORT).show()
+            }
+            val model = view.findViewById<EditText>(R.id.modelET).text
+            if (model.isEmpty()) {
+                Toast.makeText(context, "Please enter vehicle's  model", Toast.LENGTH_SHORT).show()
+            }
+            val name = "$selectedYear $make $model"
+            viewModel.searchModel(name)
         }
     }
 

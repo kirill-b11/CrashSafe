@@ -4,37 +4,37 @@ import com.google.gson.annotations.SerializedName
 
 data class VehicleModel (
     @SerializedName("id")
-    val id: Int,
+    val id: Int = 0,
     @SerializedName("year")
-    val year: Int,
+    val year: Int = 0,
     @SerializedName("make")
-    val make: String,
+    val make: String = "",
     @SerializedName("model")
-    val model: String,
+    val model: String = "",
     @SerializedName("img")
-    val img: String,
+    val img: String = "",
     @SerializedName("engine_type")
-    val engineType: String,
+    val engineType: String = "",
     @SerializedName("vehicle_type")
-    val vehicleType: String,
+    val vehicleType: String = "",
     @SerializedName("horse_power")
-    val horsePowers: String,
+    val horsePowers: String = "",
     @SerializedName("IIHS_frontModerateOverlap")
-    val IIHS_frontModerateOverlap: String,
+    val IIHS_frontModerateOverlap: String = "",
     @SerializedName("IIHS_frontSmallOverlap")
-    val IIHS_frontSmallOverlap: String,
+    val IIHS_frontSmallOverlap: String = "",
     @SerializedName("IIHS_side")
-    val IIHS_side: String,
+    val IIHS_side: String = "",
     @SerializedName("IIHS_rollover")
-    val IIHS_rollover: String,
+    val IIHS_rollover: String = "",
     @SerializedName("IIHS_rear")
-    val IIHS_rear: String,
+    val IIHS_rear: String = "",
     @SerializedName("NHTSA_overall_rating")
-    val NHTSA_overallRating: String,
+    val NHTSA_overallRating: String = "",
     @SerializedName("NHTSA_overall_side_crash_rating")
-    val NHTSA_overallSideCrashRating: String,
+    val NHTSA_overallSideCrashRating: String = "",
     @SerializedName("NHTSA_overall_front_crash_rating")
-    val NHTSA_overallFrontCrashRating: String,
+    val NHTSA_overallFrontCrashRating: String = "",
     @SerializedName("NHTSA_rollover_rating")
-    val NHTSA_rolloverRating: String
+    val NHTSA_rolloverRating: String = ""
 )

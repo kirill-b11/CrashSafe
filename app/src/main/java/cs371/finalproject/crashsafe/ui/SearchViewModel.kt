@@ -18,12 +18,18 @@ class SearchViewModel: ViewModel() {
     private val keywordSearchResults = MutableLiveData<List<VehicleModel>>()
     private val currentVehicle = MutableLiveData<VehicleModel>()
     var currentSearchStr = ""
-    var switch = true //used to prevent reinitialization of VehicleInfoFragment (couldn't find any other way to prevent it
+    var switch = true //used to prevent reinitialization of VehicleInfoFragment (couldn't find any other way to prevent it)
 
     fun searchModels(searchStr: String) {
         currentSearchStr = searchStr
         viewModelScope.launch(context = viewModelScope.coroutineContext + Dispatchers.IO) {
             keywordSearchResults.postValue(repository.fetchModelsSearch(searchStr))
+        }
+    }
+
+    fun searchModel(modelName: String) {
+        viewModelScope.launch(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+            currentVehicle.postValue(repository.fetchModel(modelName))
         }
     }
 
