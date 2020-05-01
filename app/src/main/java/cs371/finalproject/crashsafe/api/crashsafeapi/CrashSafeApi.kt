@@ -9,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.lang.Exception
 
 interface CrashSafeApi {
 
@@ -34,15 +35,6 @@ interface CrashSafeApi {
                 .addInterceptor(HttpLoggingInterceptor().apply {
                     this.level = HttpLoggingInterceptor.Level.BASIC
                 })
-                .addInterceptor {
-                    val req = it.request()
-                    val res = it.proceed(req)
-                    Log.d("test", res.toString())
-                    if (res.code == INTERNAL_SERVER_ERROR) {
-
-                    }
-                    res
-                }
                 .build()
             return Retrofit.Builder()
                 .baseUrl(httpUrl)

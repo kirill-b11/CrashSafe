@@ -1,11 +1,18 @@
 package cs371.finalproject.crashsafe.api.crashsafeapi
 
+import java.lang.Exception
+
 class CrashSafeRepository(private val api: CrashSafeApi) {
     suspend fun fetchModelsSearch(searchStr: String): List<VehicleModel> {
         return api.searchModels(searchStr)
     }
 
     suspend fun fetchModel(modelName: String): VehicleModel {
-        return api.getModel(modelName)
+        return try {
+            api.getModel(modelName)
+        }
+        catch (e: Exception) {
+            VehicleModel()
+        }
     }
 }
