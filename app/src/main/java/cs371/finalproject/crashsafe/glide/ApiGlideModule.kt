@@ -51,7 +51,8 @@ object Glide {
     fun glideFetch(urlString: String, thumbnailURL: String, imageView: ImageView) {
         GlideApp.with(imageView.context)
             .asBitmap() // Try to display animated Gifs and video still
-            .load(fromHtml(urlString))
+            //.load(fromHtml(urlString))
+            .load(toHttps(urlString))
             .apply(glideOptions)
             .error(R.color.colorAccent)
             .override(width, height)
@@ -64,5 +65,12 @@ object Glide {
                     .override(500, 500)
             )
             .into(imageView)
+    }
+
+    private fun toHttps(urlString: String): Any {
+        if (urlString.isNotEmpty() && urlString[4] == ':') {
+            return urlString.substring(0, 4) + "s" + urlString.substring(4)
+        }
+        return urlString
     }
 }

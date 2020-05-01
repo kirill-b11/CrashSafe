@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import cs371.finalproject.crashsafe.R
-import okhttp3.internal.wait
+import androidx.lifecycle.Observer
 import java.util.*
 
 class SearchFragment : Fragment() {
@@ -38,7 +38,18 @@ class SearchFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
         setupSpinner(view)
         setupListeners(view)
+        setupObservers()
         return view
+    }
+
+    private fun setupObservers() {
+        viewModel.observeCurrentVehicle().observe(viewLifecycleOwner, Observer {
+            if (viewModel.switch) {
+                val vehicleInfoFragment = VehicleInfoFragment.newInstance()
+                switchToFragment(vehicleInfoFragment)
+                viewModel.switch = false
+            }
+        })
     }
 
     private fun setupListeners(view: View) {
@@ -47,29 +58,30 @@ class SearchFragment : Fragment() {
             if (searchStr.isEmpty()) {
                 Toast.makeText(context, "Please enter a search", Toast.LENGTH_SHORT).show()
             } else {
-                searchAndSwitchFragment(searchStr)
+                viewModel.searchModels(searchStr)
+                val searchResultsFragment = SearchResultsFragment.newInstance()
+                switchToFragment(searchResultsFragment)
             }
         }
         view.findViewById<Button>(R.id.nameSearchButton).setOnClickListener {
+            viewModel.switch = true
             val make = view.findViewById<EditText>(R.id.makeET).text
+            val model = view.findViewById<EditText>(R.id.modelET).text
             if (make.isEmpty()) {
                 Toast.makeText(context, "Please enter vehicle's  make", Toast.LENGTH_SHORT).show()
-            }
-            val model = view.findViewById<EditText>(R.id.modelET).text
-            if (model.isEmpty()) {
+            } else if (model.isEmpty()) {
                 Toast.makeText(context, "Please enter vehicle's  model", Toast.LENGTH_SHORT).show()
+            } else {
+                val name = "$selectedYear $make $model"
+                viewModel.searchModel(name)
             }
-            val name = "$selectedYear $make $model"
-            viewModel.searchModel(name)
         }
     }
 
-    private fun searchAndSwitchFragment(searchStr: String) {
-        viewModel.searchModels(searchStr)
-        val searchResultsFragment = SearchResultsFragment.newInstance()
+    private fun switchToFragment(fragment: Fragment) {
         parentFragmentManager
             .beginTransaction()
-            .replace(R.id.mainFrame, searchResultsFragment)
+            .replace(R.id.mainFrame, fragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             .addToBackStack(null)
             .commit()
@@ -81,7 +93,7 @@ class SearchFragment : Fragment() {
         for (i in 1965..thisYear) {
             years.add(i.toString())
         }
-        val adapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, years)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years)
         val spinner = view.findViewById<Spinner>(R.id.yearSpinner)
         spinner.adapter = adapter
 
