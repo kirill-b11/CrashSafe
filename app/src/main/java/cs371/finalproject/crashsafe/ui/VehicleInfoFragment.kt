@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.RecyclerView
 import cs371.finalproject.crashsafe.R
 import cs371.finalproject.crashsafe.glide.Glide
 
@@ -55,5 +56,9 @@ class VehicleInfoFragment : Fragment() {
         view.findViewById<TextView>(R.id.engineTypeTV).text = vehicle.engineType
         view.findViewById<TextView>(R.id.enginePowerTV).text = vehicle.horsePowers
         view.findViewById<TextView>(R.id.vehTypeTV).text = vehicle.vehicleType
+    }
+
+    fun initRecyclerView(view: View) {
+        val commentsRV = view.findViewById<RecyclerView>(R.id.commentsRV)
     }
 }
