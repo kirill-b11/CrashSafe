@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import cs371.finalproject.crashsafe.api.crashsafeapi.CrashSafeApi
 import cs371.finalproject.crashsafe.api.crashsafeapi.CrashSafeRepository
 import cs371.finalproject.crashsafe.api.crashsafeapi.VehicleModel
@@ -56,11 +57,11 @@ class MainViewModel: ViewModel() {
             return
         }
 
-        db.collection("models")
+        val query = db.collection("models")
             .document(currentVehicle.value!!.id.toString())
             .collection("comments")
-            .orderBy("timeStamp")
-            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            .orderBy("timeStamp", Query.Direction.DESCENDING)
+        listener = query.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 if (firebaseFirestoreException != null) {
                     Log.w("Error", "listen:error", firebaseFirestoreException)
                     return@addSnapshotListener
@@ -112,5 +113,11 @@ class MainViewModel: ViewModel() {
 
     fun observeCurrentVehicle(): LiveData<VehicleModel> {
         return currentVehicle
+    }
+
+    override fun onCleared() {
+        Log.d(javaClass.simpleName, "onCleared!!")
+        super.onCleared()
+        listener?.remove()
     }
 }
