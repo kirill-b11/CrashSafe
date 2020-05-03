@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:background="@color/grey">
 
     <TextView
         android:id="@+id/userTV"
@@ -14,6 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:paddingStart="5dp"
         android:maxLines="1"
+        android:background="@color/lightgrey"
         android:textColor="#858585"
         android:textSize="14sp" />
 
@@ -22,9 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/deleteButton"
         android:paddingEnd="5dp"
         android:maxLines="1"
+        android:background="@color/lightgrey"
         android:textColor="#858585"
         android:textSize="14sp" />
 
@@ -37,13 +40,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <ImageButton
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/baseline_delete_forever_black_18dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/darkgrey"
         android:id="@+id/separator"
         app:layout_constraintTop_toBottomOf="@id/contentTV"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

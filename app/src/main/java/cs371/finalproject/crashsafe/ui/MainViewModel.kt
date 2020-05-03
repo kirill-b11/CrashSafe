@@ -98,6 +98,20 @@ class MainViewModel: ViewModel() {
         }
     }
 
+    fun deleteComment(comment: Comment) {
+        db.collection("models")
+            .document(currentVehicle.value?.id.toString())
+            .collection("comments")
+            .document(comment.commentID)
+            .delete()
+            .addOnSuccessListener {
+                Log.d("MainViewModel", "delete success")
+            }
+            .addOnFailureListener {
+                Log.d("MainViewModel", "delete failure")
+            }
+    }
+
     fun observeKeywordSearchResults(): LiveData<List<VehicleModel>> {
         return keywordSearchResults
     }

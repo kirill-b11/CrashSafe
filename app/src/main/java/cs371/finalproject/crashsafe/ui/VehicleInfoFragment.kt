@@ -84,7 +84,7 @@ class VehicleInfoFragment : Fragment() {
 
     private fun initRecyclerView(view: View) {
         val commentsRV = view.findViewById<RecyclerView>(R.id.commentsRV)
-        commentAdapter = CommentAdapter()
+        commentAdapter = CommentAdapter(viewModel)
         commentsRV.adapter = commentAdapter
         commentsRV.layoutManager = LinearLayoutManager(context)
     }
@@ -101,6 +101,7 @@ class VehicleInfoFragment : Fragment() {
                     }
                     userUID = cUser.uid
                 }
+                commentET.text.clear()
                 viewModel.saveComment(comment)
             }
         }

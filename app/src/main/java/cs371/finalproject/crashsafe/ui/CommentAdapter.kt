@@ -4,12 +4,13 @@ import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cs371.finalproject.crashsafe.R
 import kotlinx.android.synthetic.main.row_comment.view.*
 
-class CommentAdapter(): RecyclerView.Adapter<CommentAdapter.VH>() {
+class CommentAdapter(private val viewModel: MainViewModel): RecyclerView.Adapter<CommentAdapter.VH>() {
 
     companion object {
         private val dateFormat =
@@ -24,6 +25,7 @@ class CommentAdapter(): RecyclerView.Adapter<CommentAdapter.VH>() {
         private var userTV = itemView.findViewById<TextView>(R.id.userTV)
         private var timeTV = itemView.findViewById<TextView>(R.id.timeTV)
         private var contentTV = itemView.findViewById<TextView>(R.id.contentTV)
+        private var deleteButton = itemView.findViewById<ImageButton>(R.id.deleteButton)
 
         fun bind(comment: Comment) {
             if (comment.userName == null) {
@@ -42,6 +44,13 @@ class CommentAdapter(): RecyclerView.Adapter<CommentAdapter.VH>() {
                 timeTV.text = ""
             } else {
                 timeTV.text = dateFormat.format(comment.timeStamp.toDate())
+            }
+
+            if (viewModel.observeFirebaseAuthLiveData().value?.uid == comment.userUID) {
+                deleteButton.visibility = View.VISIBLE
+                deleteButton.setOnClickListener {
+                    viewModel.deleteComment(comment)
+                }
             }
         }
     }
