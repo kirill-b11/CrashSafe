@@ -39,8 +39,16 @@ class VehicleInfoFragment : Fragment() {
         bindView(view)
         initRecyclerView(view)
         initCommentCompose(view)
+        initObservers()
         initAuth()
         return view
+    }
+
+    private fun initObservers() {
+        viewModel.observeComments().observe(viewLifecycleOwner, Observer {
+            commentAdapter.updateList(it)
+            commentAdapter.notifyDataSetChanged()
+        })
     }
 
     private fun initAuth() {
@@ -96,5 +104,10 @@ class VehicleInfoFragment : Fragment() {
                 viewModel.saveComment(comment)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getComments()
     }
 }

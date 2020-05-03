@@ -26,10 +26,10 @@ class CommentAdapter(): RecyclerView.Adapter<CommentAdapter.VH>() {
         private var contentTV = itemView.findViewById<TextView>(R.id.contentTV)
 
         fun bind(comment: Comment) {
-            if (comment.user == null) {
+            if (comment.userName == null) {
                 userTV.text = "Anonymous"
             } else {
-                userTV.text = comment.user
+                userTV.text = comment.userName
             }
 
             if (comment.content == null) {

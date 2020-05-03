@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -46,6 +47,28 @@ class MainViewModel: ViewModel() {
 
     fun observeFirebaseAuthLiveData(): LiveData<FirebaseUser?> {
         return firebaseAuthLiveData
+    }
+
+    fun getComments() {
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            Log.d(javaClass.simpleName, "Can't get chat, no one is logged in")
+            comments.value = listOf()
+            return
+        }
+
+        db.collection("models")
+            .document(currentVehicle.value!!.id.toString())
+            .collection("comments")
+            .orderBy("timeStamp")
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                if (firebaseFirestoreException != null) {
+                    Log.w("Error", "listen:error", firebaseFirestoreException)
+                    return@addSnapshotListener
+                }
+                comments.postValue(querySnapshot!!.documents.mapNotNull {
+                    it.toObject(Comment::class.java)
+                })
+            }
     }
 
     fun saveComment(comment: Comment) {
