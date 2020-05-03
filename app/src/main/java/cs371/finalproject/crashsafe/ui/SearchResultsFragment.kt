@@ -21,7 +21,7 @@ class SearchResultsFragment: Fragment() {
         }
     }
 
-    private val viewModel: SearchViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
     private lateinit var adapter: VehicleRowAdapter
 
     override fun onCreateView(

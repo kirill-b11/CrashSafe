@@ -12,7 +12,7 @@ import cs371.finalproject.crashsafe.R
 import cs371.finalproject.crashsafe.api.newsapi.NewsArticle
 import cs371.finalproject.crashsafe.glide.Glide
 
-class ArticleRowAdapter(private val viewModel: MainViewModel)
+class ArticleRowAdapter(private val viewModel: HomeViewModel)
     : RecyclerView.Adapter<ArticleRowAdapter.VH>() {
 
     private val noImageURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRz11g0zDpzs09W5rI4roWOz__EKQTaZJqen49NBP61LsX6GNAa&usqp=CAU"

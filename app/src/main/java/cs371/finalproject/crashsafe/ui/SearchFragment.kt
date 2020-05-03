@@ -21,7 +21,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private val viewModel: SearchViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     private var selectedYear = "0"
 

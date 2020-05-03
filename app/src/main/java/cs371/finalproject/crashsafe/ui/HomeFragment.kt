@@ -20,7 +20,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

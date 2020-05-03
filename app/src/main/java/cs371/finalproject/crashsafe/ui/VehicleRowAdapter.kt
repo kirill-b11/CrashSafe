@@ -11,7 +11,7 @@ import cs371.finalproject.crashsafe.R
 import cs371.finalproject.crashsafe.api.crashsafeapi.VehicleModel
 import cs371.finalproject.crashsafe.glide.Glide
 
-class VehicleRowAdapter(private val viewModel: SearchViewModel)
+class VehicleRowAdapter(private val viewModel: MainViewModel)
     : RecyclerView.Adapter<VehicleRowAdapter.VH>()  {
 
     private var list = mutableListOf<VehicleModel>()
