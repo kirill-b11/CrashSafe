@@ -1,12 +1,11 @@
 package cs371.finalproject.crashsafe.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -29,6 +28,7 @@ class VehicleInfoFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var commentAdapter: CommentAdapter
     private var currentUser: FirebaseUser? = null
+    private var userHasRating = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,12 +36,50 @@ class VehicleInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_vehicle_info, container, false)
+        initAuth()
         bindView(view)
         initRecyclerView(view)
         initCommentCompose(view)
         initObservers()
-        initAuth()
         return view
+    }
+
+    private fun initRatingBar() {
+        alreadyRated.visibility = View.INVISIBLE
+        rateThisVehicle.visibility = View.VISIBLE
+        ratingBar.rating = 0f
+        submitButton.setOnClickListener {
+            val cUser = currentUser
+            if (cUser != null) {
+                if (ratingBar.rating != 0f) {
+                    val rating = UserRating().apply {
+                        rating = ratingBar.rating
+                        userUID = cUser.uid
+                    }
+                    initAlreadyRatedBar(ratingBar.rating)
+                    viewModel.saveRating(rating)
+                } else {
+                    Toast.makeText(context, "Please select a rating", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(context, "No User logged in", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun initAlreadyRatedBar(rating: Float) {
+        rateThisVehicle.visibility = View.INVISIBLE
+        alreadyRated.visibility = View.VISIBLE
+        alreadyRatedRB.rating = rating
+        removeRating.setOnClickListener {
+            val cUser = currentUser
+            if (cUser != null) {
+                initRatingBar()
+                viewModel.removeRating(cUser)
+            } else {
+                Toast.makeText(context, "No User logged in", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun initObservers() {
@@ -49,11 +87,20 @@ class VehicleInfoFragment : Fragment() {
             commentAdapter.updateList(it)
             commentAdapter.notifyDataSetChanged()
         })
+
+        viewModel.observeRating().observe(viewLifecycleOwner, Observer {
+            if (it.rating == null) {
+                initRatingBar()
+            } else {
+                initAlreadyRatedBar(it.rating!!)
+            }
+        })
     }
 
     private fun initAuth() {
         viewModel.observeFirebaseAuthLiveData().observe(viewLifecycleOwner, Observer {
             currentUser = it
+            val rating = viewModel.userHasRating(it!!)
         })
     }
 

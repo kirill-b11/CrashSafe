@@ -238,7 +238,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="5dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/IIHS_ratings">
@@ -302,9 +305,99 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@color/darkgrey"
-                android:id="@+id/separator"
+                android:id="@+id/separator1"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
                 app:layout_constraintTop_toBottomOf="@id/vehicleSpecs"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/rateThisVehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                app:layout_constraintTop_toBottomOf="@id/separator1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rate This Vehicle"
+                    android:textSize="25sp"
+                    android:layout_gravity="center"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:theme="@style/RatingBar"
+                        android:stepSize="1"/>
+                    <Button
+                        android:id="@+id/submitButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="Submit"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/alreadyRated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/separator1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your Rating:"
+                    android:textSize="25sp"
+                    android:layout_gravity="center"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <RatingBar
+                        android:id="@+id/alreadyRatedRB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="1"
+                        android:isIndicator="true"
+                        android:theme="@style/RatingBar"/>
+                    <Button
+                        android:id="@+id/removeRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="Remove Rating"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/darkgrey"
+                android:id="@+id/separator2"
+                app:layout_constraintTop_toBottomOf="@id/rateThisVehicle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -313,12 +406,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Comments:"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="10dp"
                 android:textSize="25sp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vehicleSpecs" />
+                app:layout_constraintTop_toBottomOf="@id/separator2" />
 
             <LinearLayout
                 android:id="@+id/leaveComment"
@@ -353,7 +447,9 @@
                 android:id="@+id/commentsRV"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
-                android:layout_margin="5dp"
+                android:paddingTop="15dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:paddingBottom="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

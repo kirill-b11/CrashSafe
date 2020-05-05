@@ -7,5 +7,6 @@
     <color name="darkgrey">#808080</color>
     <color name="lightgrey">#DCDCDC</color>
     <color name="white">#FFFFFF</color>
+    <color name="gold">#FFD700</color>
 
 </resources>

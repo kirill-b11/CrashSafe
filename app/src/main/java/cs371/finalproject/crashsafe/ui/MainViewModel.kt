@@ -28,6 +28,7 @@ class MainViewModel: ViewModel() {
     private var firebaseAuthLiveData = FirestoreAuthLiveData()
     private var comments = MutableLiveData<List<Comment>>()
     private var listener: ListenerRegistration? = null
+    private var rating = MutableLiveData<UserRating>()
 
     fun searchModels(searchStr: String) {
         currentSearchStr = searchStr
@@ -105,11 +106,69 @@ class MainViewModel: ViewModel() {
             .document(comment.commentID)
             .delete()
             .addOnSuccessListener {
-                Log.d("MainViewModel", "delete success")
+                Log.d("deleteComment", "uccess")
             }
             .addOnFailureListener {
-                Log.d("MainViewModel", "delete failure")
+                Log.d("deleteComment", "failure")
             }
+    }
+
+    fun saveRating(rating: UserRating) {
+        if (rating.rating != 0f) {
+            db.collection("models")
+                .document(currentVehicle.value!!.id.toString())
+                .set(mapOf("id" to currentVehicle.value!!.id))
+
+            db.collection("models")
+                .document(currentVehicle.value!!.id.toString())
+                .collection("userRatings")
+                .document(rating.userUID!!)
+                .set(rating)
+                .addOnSuccessListener {
+                    Log.d("saveRating", "success")
+                }
+                .addOnFailureListener {
+                    Log.d("saveRating", "failure")
+                }
+        }
+    }
+
+    fun removeRating(user: FirebaseUser) {
+        db.collection("models")
+            .document(currentVehicle.value?.id.toString())
+            .collection("userRatings")
+            .document(user.uid)
+            .delete()
+            .addOnSuccessListener {
+                Log.d("removeRating", "success")
+            }
+            .addOnFailureListener {
+                Log.d("removeRating", "failure")
+            }
+    }
+
+    //check if current user already left a rating for current vehicle
+    fun userHasRating(user: FirebaseUser) {
+        val docRef = db.collection("models")
+            .document(currentVehicle.value!!.id.toString())
+            .collection("userRatings")
+            .document(user.uid)
+
+        docRef.get()
+            .addOnSuccessListener {
+                if (it.exists()) {
+                    rating.postValue(it.toObject(UserRating::class.java))
+                } else {
+                    rating.postValue(UserRating())
+                }
+            }
+            .addOnFailureListener {
+                Log.d("userHasRating", "failure")
+            }
+    }
+
+    fun observeRating(): LiveData<UserRating> {
+        return rating
     }
 
     fun observeKeywordSearchResults(): LiveData<List<VehicleModel>> {
