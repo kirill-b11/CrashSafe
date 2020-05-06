@@ -152,6 +152,7 @@ class VehicleInfoFragment : Fragment() {
         }
     }
 
+    //certain functions rely on the user data, so we need to wait for it
     private fun initAuth() {
         viewModel.observeFirebaseAuthLiveData().observe(viewLifecycleOwner, Observer {
             currentUser = it

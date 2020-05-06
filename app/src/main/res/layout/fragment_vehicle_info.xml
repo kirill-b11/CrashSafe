@@ -99,7 +99,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Front Moderate Overlap:" />
+                        android:text="Front Moderate Overlap:"/>
 
                     <TextView
                         android:id="@+id/IIHS_moderateOverlapTV"
