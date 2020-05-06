@@ -1,15 +1,12 @@
 package cs371.finalproject.crashsafe.api.crashsafeapi
 
-import android.util.Log
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
-import java.lang.Exception
 
 interface CrashSafeApi {
 
@@ -20,7 +17,6 @@ interface CrashSafeApi {
     suspend fun getModel(@Query("name") modelName: String) : VehicleModel
 
     companion object {
-        private val INTERNAL_SERVER_ERROR = 500
 
         var url = HttpUrl.Builder()
             .scheme("https")

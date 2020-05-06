@@ -1,7 +1,6 @@
 package cs371.finalproject.crashsafe.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -100,7 +99,7 @@ class SearchFragment : Fragment() {
         spinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+                //do nothing
             }
 
             override fun onItemSelected(

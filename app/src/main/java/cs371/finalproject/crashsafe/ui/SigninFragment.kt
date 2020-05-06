@@ -13,9 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import cs371.finalproject.crashsafe.R
 
 class SigninFragment : Fragment() {
@@ -29,7 +27,6 @@ class SigninFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private val providersSignin = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
-    private val providersGuest = arrayListOf(AuthUI.IdpConfig.AnonymousBuilder().build())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

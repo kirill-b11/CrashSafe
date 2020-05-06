@@ -8,7 +8,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cs371.finalproject.crashsafe.R
-import kotlinx.android.synthetic.main.row_comment.view.*
 
 class CommentAdapter(private val viewModel: MainViewModel): RecyclerView.Adapter<CommentAdapter.VH>() {
 

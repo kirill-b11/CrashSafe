@@ -1,7 +1,6 @@
 package cs371.finalproject.crashsafe.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Button
 import androidx.fragment.app.Fragment
@@ -45,7 +44,7 @@ class HomeFragment : Fragment() {
 
         viewModel.updatePosts()
 
-        val adapter = ArticleRowAdapter(viewModel)
+        val adapter = ArticleRowAdapter()
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
