@@ -36,7 +36,7 @@ class SearchResultsFragment: Fragment() {
     }
 
     private fun setupRecyclerView(view: View) {
-        adapter = VehicleRowAdapter(viewModel)
+        adapter = VehicleRowAdapter(viewModel, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)

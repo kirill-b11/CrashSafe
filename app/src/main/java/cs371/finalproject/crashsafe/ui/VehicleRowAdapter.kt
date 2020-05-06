@@ -4,6 +4,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +13,7 @@ import cs371.finalproject.crashsafe.R
 import cs371.finalproject.crashsafe.api.crashsafeapi.VehicleModel
 import cs371.finalproject.crashsafe.glide.Glide
 
-class VehicleRowAdapter(private val viewModel: MainViewModel)
+class VehicleRowAdapter(private val viewModel: MainViewModel, private val displayRemoveButton: Boolean)
     : RecyclerView.Adapter<VehicleRowAdapter.VH>()  {
 
     private var list = mutableListOf<VehicleModel>()
@@ -21,12 +23,23 @@ class VehicleRowAdapter(private val viewModel: MainViewModel)
         : RecyclerView.ViewHolder(itemView) {
         private var vehicleImage = itemView.findViewById<ImageView>(R.id.vehicleImage)
         private var vehicleTitle = itemView.findViewById<TextView>(R.id.vehicleTitle)
+        private var removeButton = itemView.findViewById<ImageButton>(R.id.removeButton)
 
         fun bind(vehicle: VehicleModel) {
             Glide.glideFetch(vehicle.img, VehicleInfoFragment.noImageURL, vehicleImage)
             vehicleTitle.text = "${vehicle.year} ${vehicle.make} ${vehicle.model}"
             vehicleTitle.setOnClickListener {
                 viewModel.updateCurrentVehicle(vehicle)
+            }
+            if (displayRemoveButton) {
+                removeButton.visibility = View.VISIBLE
+                removeButton.setOnClickListener {
+                    viewModel.deleteVehicle(vehicle.id)
+                    list.remove(vehicle)
+                    notifyDataSetChanged()
+                }
+            } else {
+                removeButton.visibility = View.GONE
             }
         }
     }

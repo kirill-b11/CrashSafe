@@ -2,6 +2,7 @@ package cs371.finalproject.crashsafe.ui
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,7 +31,10 @@ class MainViewModel: ViewModel() {
     private var listener: ListenerRegistration? = null
     private var rating = MutableLiveData<UserRating>()
     private var modelsAverageRating = MutableLiveData<Float>()
+    private var savedVehicles = MutableLiveData<List<VehicleModel>>()
+    private var userSavedThisCar = MutableLiveData<Boolean>()
 
+    //_____________________API calls related_____________________
     fun searchModels(searchStr: String) {
         currentSearchStr = searchStr
         viewModelScope.launch(context = viewModelScope.coroutineContext + Dispatchers.IO) {
@@ -44,14 +48,7 @@ class MainViewModel: ViewModel() {
         }
     }
 
-    fun observeComments(): LiveData<List<Comment>> {
-        return comments
-    }
-
-    fun observeFirebaseAuthLiveData(): LiveData<FirebaseUser?> {
-        return firebaseAuthLiveData
-    }
-
+    //_____________________User Comments related_____________________
     fun getComments() {
         if (FirebaseAuth.getInstance().currentUser == null) {
             Log.d(javaClass.simpleName, "Can't get chat, no one is logged in")
@@ -117,13 +114,100 @@ class MainViewModel: ViewModel() {
             .document(comment.commentID)
             .delete()
             .addOnSuccessListener {
-                Log.d("deleteComment", "uccess")
+                Log.d("deleteComment", "success")
             }
             .addOnFailureListener {
                 Log.d("deleteComment", "failure")
             }
     }
 
+    //_____________________User Saved Vehicles Realted_____________________
+    fun getSavedVehicles(user: FirebaseUser) {
+        val docRef = db.collection("users")
+            .document(user.uid)
+        docRef.get()
+            .addOnSuccessListener {
+                Log.d("getSavedCars", "success")
+                if (!it.exists()) {
+                    savedVehicles.value = listOf()
+                } else {
+                    docRef.collection("savedVehicles")
+                        .get()
+                        .addOnSuccessListener {qs ->
+                            savedVehicles.postValue(qs.documents.mapNotNull { ds ->
+                                ds.toObject(VehicleModel::class.java)
+                            })
+                        }
+                        .addOnFailureListener {
+                            Log.d("getSavedCars", "no list")
+                        }
+                }
+            }
+            .addOnFailureListener {
+                Log.d("getSavedCars", "failure")
+            }
+    }
+
+    fun saveVehicle(user: FirebaseUser) {
+        val docRef = db.collection("users")
+            .document(user.uid)
+        docRef.get()
+            .addOnSuccessListener {
+                if (!it.exists()) {
+                    docRef.set(mapOf("uid" to user.uid))
+                }
+            }
+            .addOnFailureListener {
+                Log.d("saveVehicle", "failure")
+            }
+        docRef.collection("savedVehicles")
+            .document(currentVehicle.value?.id.toString())
+            .set(currentVehicle.value!!)
+            .addOnSuccessListener {
+                Log.d("saveVehicle", "success")
+            }
+            .addOnFailureListener { e ->
+                Log.d("saveVehicle", "Row create FAILED")
+                Log.w("saveVehicle", "Error ", e)
+            }
+    }
+
+    fun deleteVehicle(vehicleID: Int) {
+        val cUser = FirebaseAuth.getInstance().currentUser
+        if (cUser != null && !cUser.isAnonymous) {
+            db.collection("users")
+                .document(cUser.uid)
+                .collection("savedVehicles")
+                .document("$vehicleID")
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("deleteVehicle", "success")
+                }
+                .addOnFailureListener {
+                    Log.d("deleteVehicle", "failure")
+                }
+        }
+    }
+
+    fun userSavedThisCar(user: FirebaseUser) {
+        db.collection("users")
+            .document(user.uid)
+            .collection("savedVehicles")
+            .document(currentVehicle.value?.id.toString())
+            .get()
+            .addOnSuccessListener {
+                if (it.exists()) {
+                    userSavedThisCar.postValue(true)
+                } else {
+                    userSavedThisCar.postValue(false)
+                }
+            }
+            .addOnFailureListener {
+                Log.d("userSavedThisCar", "failure")
+            }
+    }
+
+    //_____________________User Rating related_____________________
     fun saveRating(rating: UserRating) {
         if (rating.rating != 0f) {
             val docRef = db.collection("models")
@@ -239,6 +323,15 @@ class MainViewModel: ViewModel() {
             }
     }
 
+    //_____________________LiveData Observing_____________________
+    fun observeComments(): LiveData<List<Comment>> {
+        return comments
+    }
+
+    fun observeFirebaseAuthLiveData(): LiveData<FirebaseUser?> {
+        return firebaseAuthLiveData
+    }
+
     fun observeModelsAverageRating(): LiveData<Float> {
         return modelsAverageRating
     }
@@ -251,6 +344,19 @@ class MainViewModel: ViewModel() {
         return keywordSearchResults
     }
 
+    fun observeCurrentVehicle(): LiveData<VehicleModel> {
+        return currentVehicle
+    }
+
+    fun observeSavedVehicles(): LiveData<List<VehicleModel>> {
+        return savedVehicles
+    }
+
+    fun observeUserSavedThisCar(): LiveData<Boolean> {
+        return userSavedThisCar
+    }
+
+    //_____________________Miscellaneous_____________________
     fun refreshKeywordSearchResults() {
         keywordSearchResults.value = keywordSearchResults.value
     }
@@ -258,10 +364,6 @@ class MainViewModel: ViewModel() {
     fun updateCurrentVehicle(vehicle: VehicleModel?) {
         switch = true
         currentVehicle.value = vehicle
-    }
-
-    fun observeCurrentVehicle(): LiveData<VehicleModel> {
-        return currentVehicle
     }
 
     override fun onCleared() {

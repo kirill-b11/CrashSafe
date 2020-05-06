@@ -14,7 +14,7 @@
         android:title="Search"/>
 
     <item android:id="@+id/starred"
-        android:title="Starred"/>
+        android:title="Saved Vehicles"/>
 
     <item android:id="@+id/signout"
         android:title="Sign out" />

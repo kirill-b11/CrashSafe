@@ -111,6 +111,46 @@ class VehicleInfoFragment : Fragment() {
                 averageUserRatingTV.text = r.toString()
             }
         })
+
+        viewModel.observeUserSavedThisCar().observe(viewLifecycleOwner, Observer {
+            if (it) {
+                initRemoveCarSection()
+            } else {
+                initSaveCarSection()
+            }
+        })
+    }
+
+    private fun initSaveCarSection() {
+        saveVehicleButton.visibility = View.VISIBLE
+        removeVehicleButton.visibility = View.GONE
+        saveVehicleButton.setOnClickListener {
+            val cUser = currentUser
+            if (cUser != null) {
+                if (!cUser.isAnonymous) {
+                    viewModel.saveVehicle(cUser)
+                    initRemoveCarSection()
+                } else {
+                    Toast.makeText(context, "Guests aren't allowed to save vehicles", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(context, "No User logged in", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun initRemoveCarSection() {
+        saveVehicleButton.visibility = View.GONE
+        removeVehicleButton.visibility = View.VISIBLE
+        removeVehicleButton.setOnClickListener {
+            val cUser = currentUser
+            if (cUser != null) {
+                viewModel.deleteVehicle(viewModel.observeCurrentVehicle().value!!.id)
+                initSaveCarSection()
+            } else {
+                Toast.makeText(context, "No User logged in", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun initAuth() {
@@ -118,6 +158,7 @@ class VehicleInfoFragment : Fragment() {
             currentUser = it
             if (it != null) {
                 viewModel.userHasRating(it)
+                viewModel.userSavedThisCar(it)
             }
         })
     }

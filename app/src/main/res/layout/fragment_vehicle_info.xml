@@ -339,6 +339,31 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/saveVehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/vehicleSpecs"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/saveVehicleButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save this Vehicle"
+                    android:visibility="gone"/>
+
+                <Button
+                    android:id="@+id/removeVehicleButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remove this Vehicle"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
@@ -346,7 +371,7 @@
                 android:id="@+id/separator1"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                app:layout_constraintTop_toBottomOf="@id/vehicleSpecs"
+                app:layout_constraintTop_toBottomOf="@id/saveVehicle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
