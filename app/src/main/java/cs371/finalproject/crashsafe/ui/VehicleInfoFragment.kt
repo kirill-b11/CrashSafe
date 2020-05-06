@@ -28,7 +28,6 @@ class VehicleInfoFragment : Fragment() {
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var commentAdapter: CommentAdapter
     private var currentUser: FirebaseUser? = null
-    private var userHasRating = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +35,7 @@ class VehicleInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_vehicle_info, container, false)
+        viewModel.getModelsAverageRating()
         initAuth()
         bindView(view)
         initRecyclerView(view)
@@ -75,7 +75,7 @@ class VehicleInfoFragment : Fragment() {
             val cUser = currentUser
             if (cUser != null) {
                 initRatingBar()
-                viewModel.removeRating(cUser)
+                viewModel.removeRating(cUser, rating)
             } else {
                 Toast.makeText(context, "No User logged in", Toast.LENGTH_SHORT).show()
             }
@@ -95,12 +95,22 @@ class VehicleInfoFragment : Fragment() {
                 initAlreadyRatedBar(it.rating!!)
             }
         })
+
+        viewModel.observeModelsAverageRating().observe(viewLifecycleOwner, Observer {
+            val r = String.format("%.1f", it).toFloat()
+            averageUserRatingRB.rating = r
+            if (r == 0f) {
+                averageUserRatingTV.text = "Not Rated"
+            } else {
+                averageUserRatingTV.text = r.toString()
+            }
+        })
     }
 
     private fun initAuth() {
         viewModel.observeFirebaseAuthLiveData().observe(viewLifecycleOwner, Observer {
             currentUser = it
-            val rating = viewModel.userHasRating(it!!)
+            viewModel.userHasRating(it!!)
         })
     }
 

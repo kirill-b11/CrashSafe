@@ -12,5 +12,4 @@
         <item name="colorControlNormal">@color/darkgrey</item>
         <item name="colorControlActivated">@color/gold</item>
     </style>
-
 </resources>

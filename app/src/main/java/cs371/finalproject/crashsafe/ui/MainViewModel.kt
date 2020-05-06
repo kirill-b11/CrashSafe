@@ -29,6 +29,7 @@ class MainViewModel: ViewModel() {
     private var comments = MutableLiveData<List<Comment>>()
     private var listener: ListenerRegistration? = null
     private var rating = MutableLiveData<UserRating>()
+    private var modelsAverageRating = MutableLiveData<Float>()
 
     fun searchModels(searchStr: String) {
         currentSearchStr = searchStr
@@ -76,8 +77,18 @@ class MainViewModel: ViewModel() {
     fun saveComment(comment: Comment) {
         if (comment.content!!.isNotEmpty()) {
             //create document representing model if it doesn't already exist
-            db.collection("models").document(currentVehicle.value!!.id.toString())
-                .set(mapOf("id" to currentVehicle.value!!.id))
+            val docRef = db.collection("models").document(currentVehicle.value!!.id.toString())
+            docRef.get()
+                .addOnSuccessListener {
+                    if (!it.exists()) {
+                        docRef.set(mapOf("id" to currentVehicle.value!!.id,
+                            "averageRating" to 0f,
+                            "numRatings" to 0))
+                    }
+                }
+                .addOnFailureListener {
+                    Log.d("saveComment", "get failure")
+                }
 
             //add comment to database
             comment.commentID = db.collection("models")
@@ -90,11 +101,11 @@ class MainViewModel: ViewModel() {
                 .document(comment.commentID)
                 .set(comment)
                 .addOnSuccessListener {
-                    Log.d("test", "saved success")
+                    Log.d("saveComment", "success")
                 }
                 .addOnFailureListener { e ->
-                    Log.d(javaClass.simpleName, "Row create FAILED")
-                    Log.w(javaClass.simpleName, "Error ", e)
+                    Log.d("saveComment", "Row create FAILED")
+                    Log.w("saveComment", "Error ", e)
                 }
         }
     }
@@ -115,9 +126,19 @@ class MainViewModel: ViewModel() {
 
     fun saveRating(rating: UserRating) {
         if (rating.rating != 0f) {
-            db.collection("models")
+            val docRef = db.collection("models")
                 .document(currentVehicle.value!!.id.toString())
-                .set(mapOf("id" to currentVehicle.value!!.id))
+            docRef.get()
+                .addOnSuccessListener {
+                    if (!it.exists()) {
+                        docRef.set(mapOf("id" to currentVehicle.value!!.id,
+                            "averageRating" to 0f,
+                            "numRatings" to 0))
+                    }
+                }
+                .addOnFailureListener {
+                    Log.d("saveRating", "get failure")
+                }
 
             db.collection("models")
                 .document(currentVehicle.value!!.id.toString())
@@ -126,6 +147,7 @@ class MainViewModel: ViewModel() {
                 .set(rating)
                 .addOnSuccessListener {
                     Log.d("saveRating", "success")
+                    adjustRating(rating.rating!!)
                 }
                 .addOnFailureListener {
                     Log.d("saveRating", "failure")
@@ -133,7 +155,7 @@ class MainViewModel: ViewModel() {
         }
     }
 
-    fun removeRating(user: FirebaseUser) {
+    fun removeRating(user: FirebaseUser, rating: Float) {
         db.collection("models")
             .document(currentVehicle.value?.id.toString())
             .collection("userRatings")
@@ -141,9 +163,59 @@ class MainViewModel: ViewModel() {
             .delete()
             .addOnSuccessListener {
                 Log.d("removeRating", "success")
+                adjustRating(-rating)
             }
             .addOnFailureListener {
                 Log.d("removeRating", "failure")
+            }
+    }
+
+    fun getModelsAverageRating() {
+        db.collection("models")
+            .document(currentVehicle.value?.id.toString())
+            .get()
+            .addOnSuccessListener {
+                if (it.exists()) {
+                    modelsAverageRating.postValue(it.toObject(FirestoreModel::class.java)?.averageRating)
+                }
+            }
+            .addOnFailureListener {
+                Log.d("getModelsAverageRating", "get failure")
+            }
+    }
+
+    private fun adjustRating(rating: Float) {
+        val docRef = db.collection("models")
+            .document(currentVehicle.value?.id.toString())
+        docRef.get()
+            .addOnSuccessListener {
+                if (it.exists()) {
+                    val model = it.toObject(FirestoreModel::class.java)
+                    if (model != null) {
+                        var avgRating = model.averageRating!!
+                        val numRatings = model.numRatings!!
+                        if (rating > 0) {
+                            avgRating = ((avgRating * numRatings) + rating) / (numRatings + 1)
+                            model.numRatings = numRatings + 1
+                        } else {
+                            if (numRatings != 1) {
+                                avgRating = ((avgRating * numRatings) + rating) / (numRatings - 1)
+                                model.numRatings = numRatings - 1
+                            } else {
+                                avgRating = 0f
+                                model.numRatings = 0
+                            }
+                        }
+                        model.averageRating = avgRating
+                        docRef.set(model)
+                            .addOnSuccessListener {
+                                getModelsAverageRating()
+                            }
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Log.d("adjustRating", "get failure")
             }
     }
 
@@ -165,6 +237,10 @@ class MainViewModel: ViewModel() {
             .addOnFailureListener {
                 Log.d("userHasRating", "failure")
             }
+    }
+
+    fun observeModelsAverageRating(): LiveData<Float> {
+        return modelsAverageRating
     }
 
     fun observeRating(): LiveData<UserRating> {

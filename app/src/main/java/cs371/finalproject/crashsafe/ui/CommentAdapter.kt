@@ -51,6 +51,8 @@ class CommentAdapter(private val viewModel: MainViewModel): RecyclerView.Adapter
                 deleteButton.setOnClickListener {
                     viewModel.deleteComment(comment)
                 }
+            } else {
+                deleteButton.visibility = View.GONE
             }
         }
     }
