@@ -162,7 +162,6 @@ class VehicleInfoFragment : Fragment() {
                     content = commentET.text.toString()
                     userName = cUser.displayName
                     if (userName == null || userName!!.isEmpty()) {
-                        Log.d("ddd", "anon")
                         userName = "Anonymous"
                     }
                     userUID = cUser.uid
