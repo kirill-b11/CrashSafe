@@ -110,7 +110,9 @@ class VehicleInfoFragment : Fragment() {
     private fun initAuth() {
         viewModel.observeFirebaseAuthLiveData().observe(viewLifecycleOwner, Observer {
             currentUser = it
-            viewModel.userHasRating(it!!)
+            if (it != null) {
+                viewModel.userHasRating(it)
+            }
         })
     }
 

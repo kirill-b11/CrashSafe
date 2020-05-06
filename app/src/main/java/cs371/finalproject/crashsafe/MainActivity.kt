@@ -1,6 +1,7 @@
 package cs371.finalproject.crashsafe
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -65,11 +66,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun switchToFragment(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.mainFrame, fragment)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .commit()
+        if (fragment is SigninFragment) {
+            //Clear back stack
+            for (i in 0..supportFragmentManager.backStackEntryCount) {
+                supportFragmentManager.popBackStack()
+            }
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.mainFrame, fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit()
+        } else {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.mainFrame, fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun initFragment(fragment: Fragment) {
@@ -77,6 +91,7 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .add(R.id.mainFrame, fragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .addToBackStack(null)
             .commit()
     }
 }
