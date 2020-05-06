@@ -50,16 +50,22 @@ class VehicleInfoFragment : Fragment() {
         ratingBar.rating = 0f
         submitButton.setOnClickListener {
             val cUser = currentUser
+            //check if user is signed in
             if (cUser != null) {
-                if (ratingBar.rating != 0f) {
-                    val rating = UserRating().apply {
-                        rating = ratingBar.rating
-                        userUID = cUser.uid
-                    }
-                    initAlreadyRatedBar(ratingBar.rating)
-                    viewModel.saveRating(rating)
+                //anonymous users
+                if (cUser.isAnonymous) {
+                    Toast.makeText(context, "Guests aren't allowed to leave rating", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, "Please select a rating", Toast.LENGTH_SHORT).show()
+                    if (ratingBar.rating != 0f) {
+                        val rating = UserRating().apply {
+                            rating = ratingBar.rating
+                            userUID = cUser.uid
+                        }
+                        initAlreadyRatedBar(ratingBar.rating)
+                        viewModel.saveRating(rating)
+                    } else {
+                        Toast.makeText(context, "Please select a rating", Toast.LENGTH_SHORT).show()
+                    }
                 }
             } else {
                 Toast.makeText(context, "No User logged in", Toast.LENGTH_SHORT).show()
@@ -155,7 +161,8 @@ class VehicleInfoFragment : Fragment() {
                 val comment = Comment().apply {
                     content = commentET.text.toString()
                     userName = cUser.displayName
-                    if (userName!!.isEmpty()) {
+                    if (userName == null || userName!!.isEmpty()) {
+                        Log.d("ddd", "anon")
                         userName = "Anonymous"
                     }
                     userUID = cUser.uid

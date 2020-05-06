@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+
         menu?.findItem(R.id.name)?.title = FirebaseAuth.getInstance().currentUser?.displayName
         return true
     }
