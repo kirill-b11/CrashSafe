@@ -9,38 +9,31 @@
     android:background="?android:attr/selectableItemBackground">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/vehicleImage"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center_vertical|start"/>
 
-            <ImageView
-                android:id="@+id/vehicleImage"
-                android:layout_width="100dp"
-                android:layout_height="80dp"
-                android:layout_marginEnd="10dp"
-                android:layout_gravity="center_vertical|start"/>
+        <TextView
+            android:id="@+id/vehicleTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textSize="16sp"/>
 
-            <TextView
-                android:id="@+id/vehicleTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:textSize="16sp"/>
-
-            <ImageButton
-                android:id="@+id/removeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:background="@drawable/baseline_delete_forever_black_18dp_2x"/>
-
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/removeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:background="@drawable/baseline_delete_forever_black_18dp_2x"/>
 
     </LinearLayout>
 

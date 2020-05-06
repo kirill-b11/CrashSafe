@@ -172,16 +172,16 @@ class VehicleInfoFragment : Fragment() {
         val vehImg = view.findViewById<ImageView>(R.id.vehiclePicture)
         Glide.glideFetch(vehicle.img, noImageURL, vehImg)
         //IIHS
-        view.findViewById<TextView>(R.id.IIHS_moderateOverlapTV).text = vehicle.IIHS_frontModerateOverlap
-        view.findViewById<TextView>(R.id.IIHS_smallOverlapTV).text = vehicle.IIHS_frontSmallOverlap
-        view.findViewById<TextView>(R.id.IIHS_sideCrashTV).text = vehicle.IIHS_side
-        view.findViewById<TextView>(R.id.IIHS_rolloverTV).text = vehicle.IIHS_rollover
-        view.findViewById<TextView>(R.id.IIHS_rearCrashTV).text = vehicle.IIHS_rear
+        view.findViewById<TextView>(R.id.IIHS_moderateOverlapTV).text = vehicle.iihs_frontModerateOverlap
+        view.findViewById<TextView>(R.id.IIHS_smallOverlapTV).text = vehicle.iihs_frontSmallOverlap
+        view.findViewById<TextView>(R.id.IIHS_sideCrashTV).text = vehicle.iihs_side
+        view.findViewById<TextView>(R.id.IIHS_rolloverTV).text = vehicle.iihs_rollover
+        view.findViewById<TextView>(R.id.IIHS_rearCrashTV).text = vehicle.iihs_rear
         //NHTSA
-        view.findViewById<TextView>(R.id.NHTSA_overallTV).text = vehicle.NHTSA_overallRating
-        view.findViewById<TextView>(R.id.NHTSA_sideCrashTV).text = vehicle.NHTSA_overallSideCrashRating
-        view.findViewById<TextView>(R.id.NHTSA_frontCrashTV).text = vehicle.NHTSA_overallFrontCrashRating
-        view.findViewById<TextView>(R.id.NHTSA_rolloverTV).text = vehicle.NHTSA_rolloverRating
+        view.findViewById<TextView>(R.id.NHTSA_overallTV).text = vehicle.nhtsa_overallRating
+        view.findViewById<TextView>(R.id.NHTSA_sideCrashTV).text = vehicle.nhtsa_overallSideCrashRating
+        view.findViewById<TextView>(R.id.NHTSA_frontCrashTV).text = vehicle.nhtsa_overallFrontCrashRating
+        view.findViewById<TextView>(R.id.NHTSA_rolloverTV).text = vehicle.nhtsa_rolloverRating
         //Specs
         view.findViewById<TextView>(R.id.engineTypeTV).text = vehicle.engineType
         view.findViewById<TextView>(R.id.enginePowerTV).text = vehicle.horsePowers

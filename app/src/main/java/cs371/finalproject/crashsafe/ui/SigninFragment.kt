@@ -80,7 +80,6 @@ class SigninFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
@@ -111,7 +110,6 @@ class SigninFragment : Fragment() {
                 if (it.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("test", "signInAnonymously:success")
-                    val user = auth.currentUser
                     switchToHomeFragment()
                 } else {
                     // If sign in fails, display a message to the user.

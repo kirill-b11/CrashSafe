@@ -20,21 +20,21 @@ data class VehicleModel (
     @SerializedName("horse_power")
     val horsePowers: String = "N/A",
     @SerializedName("IIHS_frontModerateOverlap")
-    val IIHS_frontModerateOverlap: String = "N/A",
+    val iihs_frontModerateOverlap: String = "N/A",
     @SerializedName("IIHS_frontSmallOverlap")
-    val IIHS_frontSmallOverlap: String = "N/A",
+    val iihs_frontSmallOverlap: String = "N/A",
     @SerializedName("IIHS_side")
-    val IIHS_side: String = "N/A",
+    val iihs_side: String = "N/A",
     @SerializedName("IIHS_rollover")
-    val IIHS_rollover: String = "N/A",
+    val iihs_rollover: String = "N/A",
     @SerializedName("IIHS_rear")
-    val IIHS_rear: String = "N/A",
+    val iihs_rear: String = "N/A",
     @SerializedName("NHTSA_overall_rating")
-    val NHTSA_overallRating: String = "N/A",
+    val nhtsa_overallRating: String = "N/A",
     @SerializedName("NHTSA_overall_side_crash_rating")
-    val NHTSA_overallSideCrashRating: String = "N/A",
+    val nhtsa_overallSideCrashRating: String = "N/A",
     @SerializedName("NHTSA_overall_front_crash_rating")
-    val NHTSA_overallFrontCrashRating: String = "N/A",
+    val nhtsa_overallFrontCrashRating: String = "N/A",
     @SerializedName("NHTSA_rollover_rating")
-    val NHTSA_rolloverRating: String = "N/A"
+    val nhtsa_rolloverRating: String = "N/A"
 )

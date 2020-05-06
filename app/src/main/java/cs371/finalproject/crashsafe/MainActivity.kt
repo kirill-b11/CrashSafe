@@ -96,7 +96,6 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .add(R.id.mainFrame, fragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .addToBackStack(null)
             .commit()
     }
 }
