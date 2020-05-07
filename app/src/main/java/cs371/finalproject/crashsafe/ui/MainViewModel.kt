@@ -259,6 +259,8 @@ class MainViewModel: ViewModel() {
             .addOnSuccessListener {
                 if (it.exists()) {
                     modelsAverageRating.postValue(it.toObject(FirestoreModel::class.java)?.averageRating)
+                } else {
+                    modelsAverageRating.value = 0f
                 }
             }
             .addOnFailureListener {
@@ -313,7 +315,7 @@ class MainViewModel: ViewModel() {
                 if (it.exists()) {
                     rating.postValue(it.toObject(UserRating::class.java))
                 } else {
-                    rating.postValue(UserRating())
+                    rating.value = UserRating()
                 }
             }
             .addOnFailureListener {
